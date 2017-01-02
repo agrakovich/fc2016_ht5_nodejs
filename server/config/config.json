@@ -1,0 +1,5 @@
+{
+
+    "secretKey": "supermegasecretword",
+    "database": "mongodb://drem:drem007@ds135798.mlab.com:35798/heroku_ztrnzd9g"
+}
