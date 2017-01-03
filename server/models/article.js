@@ -1,6 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const Images = new Schema({
+    kind: {
+        type: String,
+        enum: ['thumbnail', 'detail'],
+        required: true
+    },
+    url: { type: String, required: true }
+});
+
 const Article = new Schema({
     title: { type: String, required: true },
     author: { type: String, required: true },
@@ -8,7 +17,6 @@ const Article = new Schema({
     images: [Images],
     modified: { type: Date, default: Date.now }
 });
-
 const ArticleModel = mongoose.model('Article', Article);
 
 module.exports.ArticleModel = ArticleModel;

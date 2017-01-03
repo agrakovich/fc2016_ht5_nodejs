@@ -4,6 +4,11 @@ const userRoutes = express.Router();
 const config = require('../config/config.json');
 const jwt    = require('jsonwebtoken');
 
+const user = {
+    username: 'test-user',
+    password: 'test-password',
+    id: 1
+};
 
 userRoutes.get('/', function(req, res) {
     User.find({}, function(err, users) {
