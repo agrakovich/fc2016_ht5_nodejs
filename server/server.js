@@ -9,13 +9,16 @@ const config = require('./config/config.json');
 const userRoutes = require('./routes/user');
 const articleRoutes = require('./routes/article');
 
+mongoose.Promise = global.Promise;
 mongoose.connect(config.database);
-
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride()); // поддержка put и delete
 app.use(morgan('dev'));
+
+app.use('/users', userRoutes);
+app.use('/articles', articleRoutes);
 
 app.listen(config.port, function(){
     console.log(`Express server listening on port ${config.port}` );
@@ -38,7 +41,4 @@ app.use(function(err, req, res, next){
 app.get('/ErrorHandlingExample', function(req, res, next){
     next(new Error('Random error!'));
 });
-
-app.use('/users', userRoutes);
-app.use('/articles', articleRoutes);
 

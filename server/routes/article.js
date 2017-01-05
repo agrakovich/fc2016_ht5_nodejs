@@ -15,7 +15,7 @@ articleRoutes.get('/', function(req, res) {
 });
 
 articleRoutes.post('/', function(req, res) {
-    var article = new ArticleModel({
+    const article = new ArticleModel({
         title: req.body.title,
         author: req.body.author,
         description: req.body.description,

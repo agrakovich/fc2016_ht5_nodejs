@@ -4,58 +4,42 @@ const userRoutes = express.Router();
 const config = require('../config/config.json');
 const jwt    = require('jsonwebtoken');
 
-const user = {
-    username: 'test-user',
-    password: 'test-password',
-    id: 1
-};
-
-userRoutes.get('/', function(req, res) {
-    User.find({}, function(err, users) {
-        res.json(users);
-    });
-});
-
 userRoutes.post('/', function(req, res) {
-
-    const nick = new User({
-        name: 'Nick Cerminara',
-        password: 'password',
-        admin: true
-    });
-
-    nick.save(function(err) {
-        if (err) throw err;
-
-        console.log('User saved successfully');
-        res.json({ success: true });
+    const user = new User({ username: req.body.username, password: req.body.password });
+    user.save(function(err, user) {
+        if(err){
+            throw err;
+        }
+        else{
+            console.log("New user - %s:%s",user.username,user.password);
+            return res.send({ status: 'OK' });
+        }
     });
 });
 
-userRoutes.post('/authenticate', function(req, res) {
+userRoutes.post('/token', function(req, res) {
     console.log(req.body.name);
     User.findOne({
-        name: req.body.name
+        username: req.body.username
     }, function(err, user) {
 
-        if (err) throw err;
-        console.log(user);
+        if (err){
+            throw err;
+        }
+
         if (!user) {
             res.json({ success: false, message: 'Authentication failed. User not found.' });
         } else if (user) {
-            if (user.password != req.body.password) {
+            if (user.checkPassword(req.body.password) === false) {
                 res.json({ success: false, message: 'Authentication failed. Wrong password.' });
             } else {
                 const token = jwt.sign(user, config.secretKey, {});
-
                 res.json({
                     success: true,
                     token: token
                 });
             }
-
         }
-
     });
 });
 
