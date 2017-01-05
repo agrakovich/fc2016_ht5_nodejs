@@ -4,11 +4,11 @@ const userRoutes = express.Router();
 const config = require('../config/config.json');
 const jwt    = require('jsonwebtoken');
 
-userRoutes.post('/', function(req, res) {
+userRoutes.post('/', function(req, res, next) {
     const user = new User({ username: req.body.username, password: req.body.password });
     user.save(function(err, user) {
         if(err){
-            throw err;
+            next(err);
         }
         else{
             console.log("New user - %s:%s",user.username,user.password);
@@ -17,14 +17,14 @@ userRoutes.post('/', function(req, res) {
     });
 });
 
-userRoutes.post('/token', function(req, res) {
+userRoutes.post('/token', function(req, res, next) {
     console.log(req.body.name);
     User.findOne({
         username: req.body.username
     }, function(err, user) {
 
         if (err){
-            throw err;
+            next(err);
         }
 
         if (!user) {
