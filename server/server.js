@@ -20,6 +20,7 @@ app.use(morgan('dev'));
 app.use('/users', userRoutes);
 app.use('/articles', articleRoutes);
 
+const port = process.env.PORT || config.port;
 app.listen(config.port, function(){
     console.log(`Express server listening on port ${config.port}` );
 });
