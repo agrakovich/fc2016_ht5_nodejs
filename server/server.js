@@ -20,9 +20,15 @@ app.use(morgan('dev'));
 app.use('/users', userRoutes);
 app.use('/articles', articleRoutes);
 
-const port = process.env.PORT || config.port;
-app.listen(config.port, function(){
-    console.log(`Express server listening on port ${config.port}` );
+
+app.set('port',  process.env.PORT || config.port);
+
+//For avoidong Heroku $PORT error
+app.get('/', function(request, response) {
+    var result = 'App is running'
+    response.send(result);
+}).listen(app.get('port'), function() {
+    console.log('App is running, server is listening on port ', app.get('port'));
 });
 
 app.use(function(req, res, next){
