@@ -4,10 +4,14 @@ const bodyParser  = require('body-parser'); // стандартный модул
 const methodOverride  = require('method-override');  // поддержка put и delete
 const morgan      = require('morgan');
 const mongoose    = require('mongoose');
-
+const oauth2 = require('./oauth2');
 const config = require('./config/config.json');
-const userRoutes = require('./routes/user');
+const authRoutes = require('./routes/authentification');
 const articleRoutes = require('./routes/article');
+const passport = require('passport');
+
+app.use(passport.initialize());
+require('./oauth')
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.database);
@@ -17,13 +21,13 @@ app.use(bodyParser.json());
 app.use(methodOverride()); // поддержка put и delete
 app.use(morgan('dev'));
 
-app.use('/users', userRoutes);
-app.use('/articles', articleRoutes);
+app.use('/auth', authRoutes);
+app.post('/auth/token', oauth2.token);
 
+app.use('/articles', articleRoutes);
 
 app.set('port',  process.env.PORT || config.port);
 
-//For avoidong Heroku $PORT error
 app.get('/', function(request, response) {
     var result = 'App is running'
     response.send(result);
@@ -43,9 +47,5 @@ app.use(function(err, req, res, next){
     console.log(`Internal error(${res.statusCode} : ${err.message}`);
     res.send({ error: err.message });
     return;
-});
-
-app.get('/ErrorHandlingExample', function(req, res, next){
-    next(new Error('Random error!'));
 });
 

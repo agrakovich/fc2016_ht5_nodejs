@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('express');
 const ArticleModel = require('../models/article');
 const articleRoutes = express.Router();
 
@@ -14,7 +15,7 @@ articleRoutes.get('/', function(req, res) {
     });
 });
 
-articleRoutes.post('/', function(req, res) {
+articleRoutes.post('/', passport.authenticate('bearer', { session: false }), function(req, res) {
     const article = new ArticleModel({
         title: req.body.title,
         author: req.body.author,
