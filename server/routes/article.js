@@ -15,7 +15,7 @@ articleRoutes.get('/', function(req, res) {
     });
 });
 
-articleRoutes.post('/', passport.authenticate('bearer', { session: false }), function(req, res) {
+articleRoutes.post('/', function(req, res) {
     const article = new ArticleModel({
         title: req.body.title,
         author: req.body.author,
