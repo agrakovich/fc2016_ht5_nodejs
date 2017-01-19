@@ -9,12 +9,22 @@ const config = require('./config/config.json');
 const authRoutes = require('./routes/authentification');
 const articleRoutes = require('./routes/article');
 const passport = require('passport');
+const path = require('path');
+
+const webpack = require('webpack')
+const webpackDevMiddleware = require('webpack-dev-middleware')
+const webpackHotMiddleware = require('webpack-hot-middleware')
+const webPackConfig = require('../webpack.config')
 
 app.use(passport.initialize());
-require('./oauth')
+//require('./oauth')
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.database);
+
+var compiler = webpack(webPackConfig);
+app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webPackConfig.output.publicPath }));
+app.use(webpackHotMiddleware(compiler));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -28,9 +38,8 @@ app.use('/articles', articleRoutes);
 
 app.set('port',  process.env.PORT || config.port);
 
-app.get('/', function(request, response) {
-    var result = 'App is running'
-    response.send(result);
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
 }).listen(app.get('port'), function() {
     console.log('App is running, server is listening on port ', app.get('port'));
 });
