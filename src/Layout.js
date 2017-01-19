@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { Link } from 'react-router'
 //import s from './Layout.scss';
 
 class Layout extends React.Component {
@@ -11,12 +12,14 @@ class Layout extends React.Component {
         return (
             <div className="layout">
                 <header className="layout__header">
-                    Articles
+                    <ul>
+                        <li><Link to='/auth'>Auth</Link></li>
+                        <li><Link to='/'>Articles</Link></li>
+                    </ul>
                 </header>
                 <main className="layout__body">
                     <section className="layout__page">
                         <div className="wrapper">
-                            asdasdasdasdasd
                             <div {...this.props} className={this.props.className} />
                         </div>
                     </section>

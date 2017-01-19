@@ -11,8 +11,7 @@ export const routes = (
     <div>
         <Route path='/' component={Layout}>
             <IndexRoute component={Article} />
-            <Route path='auth' component={Authentication} />
+            <Route path='/auth' component={Authentication} />
         </Route>
-        <Route path='*' component={NotFound} />
     </div>
 )

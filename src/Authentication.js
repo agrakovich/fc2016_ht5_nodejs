@@ -1,6 +1,4 @@
 import React from 'react';
-import Layout from './Layout';
-
 
 class Authentication extends React.Component {
 
@@ -11,9 +9,7 @@ class Authentication extends React.Component {
     render() {
         const { dispatch } = this.props;
         return (
-            <Layout>
-                <div>auth</div>
-            </Layout>
+            <div>auth</div>
         );
     }
 
