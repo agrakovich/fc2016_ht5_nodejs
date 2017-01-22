@@ -34,9 +34,7 @@ module.exports = {
                 sassLoader: {
                     includePaths: [...bourbonPaths],
                 },
-                sassResources: ['./app/assets/styles/resources.scss'],
-                resources: '',
-                context: path.resolve(__dirname, '.'),
+                context: path.resolve(__dirname, 'src'),
                 output: {
                     path: path.resolve(__dirname, './public/assets'),
                 },
@@ -58,14 +56,36 @@ module.exports = {
                 }
             },
             {
-                test: /\.scss$/,
+                test: /\.(scss)$/i,
+                // using "loader" instead of newer "use"
                 loader: ExtractTextPlugin.extract({
-                    fallbackLoader: 'style-loader',
-                    loader: 'css-loader?sourceMap&modules&importLoaders=2&localIdentName=[local]' +
-                    '!resolve-url' +
-                    '!sass-loader?sourceMap'
-                    //'!sass-resources-loader',
+                    loader: [
+                        {
+                            loader: 'css-loader',
+                            // current extract-text-plugin supports query not never options format
+                            query: {
+                                importLoaders: 3,
+                                minimize: true,
+                                // Even if disabled sourceMaps gets generated
+                                sourceMap: false
+                            }
+                        },
+                        {loader: 'resolve-url-loader'},
+                        {
+                            loader: 'sass-loader',
+                            query: {
+                                // Enable sourcemaps for resolve-url-loader to work properly
+                                sourceMap: true
+                            }
+                        },
+                        // {
+                        //     loader: 'sass-resources-loader',
+                        // },
+                    ],
                 }),
+                // options: {
+                //     resources: ['./src/assets/styles/theme.scss']
+                // },
             },
             {
                 test: /\.md$/,
@@ -77,7 +97,7 @@ module.exports = {
                 query: {
                     limit: 100,
                     name: "[path][name].[ext]",
-                    context: 'src/assets/',
+                    context: './src/assets/',
                 }
             },
             {

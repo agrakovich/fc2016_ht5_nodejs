@@ -1,3 +1,5 @@
-/**
- * Created by DRem on 1/19/17.
- */
+export default {
+    //'apiUrl': 'https://filmsdemo.herokuapp.com'
+    apiUrl: 'http://localhost:3000',
+    authRoute: '/auth',
+}

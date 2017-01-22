@@ -1,18 +1,18 @@
 import React from 'react';
 
-class Article extends React.Component {
+class ArticlesPage extends React.Component {
 
     componentDidMount() {
-        document.title = 'Article';
+        document.title = 'Articles';
     }
 
     render() {
         const { dispatch } = this.props;
         return (
-            <div>article</div>
+            <div></div>
         );
     }
 
 }
 
-export default Article;
+export default ArticlesPage;

@@ -13,7 +13,7 @@ class Layout extends React.Component {
             <div className="layout">
                 <header className="layout__header">
                     <ul>
-                        <li><Link to='/auth'>Auth</Link></li>
+                        <li><Link to='/auth'>Login</Link></li>
                         <li><Link to='/'>Articles</Link></li>
                     </ul>
                 </header>

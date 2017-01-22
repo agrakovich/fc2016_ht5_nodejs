@@ -17,24 +17,24 @@ class Login extends Component {
         return (
             <section className="login">
                 <header className="login__header">
-                    <h2 className="login__header-title">Вход в систему</h2>
+                    <h2 className="login__header-title">Login</h2>
                 </header>
                 <form className="login__form" onSubmit={(event) => this.handleLogin(event)}>
                     <div className="login__body">
                         {errorMessage &&
-                        <div className="login__form-errors">{errorMessage}</div>
+                            <div className="login__form-errors">{errorMessage}</div>
                         }
                         <div className="login__form-row">
-                            <label className="form-label login__form-label login__form-label--username" htmlFor="username">Введите номер телефона</label>
+                            <label className="form-label login__form-label login__form-label--username" htmlFor="username">Name</label>
                             <input className="form-input login__form-input login__form-input--username" id="username" ref="username" />
                         </div>
                         <div className="login__form-row">
-                            <label className="form-label login__form-label" htmlFor="password">Введите пароль</label>
+                            <label className="form-label login__form-label" htmlFor="password">Password</label>
                             <input className="form-input login__form-input" type="password" id="password" ref="password" />
                         </div>
                     </div>
                     <footer className="login__footer">
-                        <button className="login__footer-button btn" type="submit">Войти</button>
+                        <button className="login__footer-button btn" type="submit">Login</button>
                     </footer>
                 </form>
             </section>

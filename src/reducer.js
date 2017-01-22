@@ -1,11 +1,10 @@
-import { combineReducers } from 'redux';
-
-import authentication from '../authentication/reducer';
-import article from '../article/reducer';
+import { combineReducers } from 'redux'
+import authentication from './authentication/reducer'
+import article from './articles/reducer'
 
 const rootReducer = combineReducers({
     authentication,
     article
 });
 
-export default rootReducer;
+export default rootReducer

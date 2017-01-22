@@ -44,6 +44,12 @@ app.get('/', function(req, res) {
     console.log('App is running, server is listening on port ', app.get('port'));
 });
 
+//Kludge for react-router
+app.get('/auth', function(req, res) {
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
+})
+
+
 app.use(function(req, res, next){
     res.status(404);
     console.log(`Not found URL: ${req.url}`);
