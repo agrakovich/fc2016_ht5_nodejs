@@ -52,4 +52,5 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 Login = connect(mapStateToProps)(Login);
+
 export default Login;

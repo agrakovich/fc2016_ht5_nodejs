@@ -19,7 +19,7 @@ articleRoutes.post('/', function(req, res) {
     const article = new ArticleModel({
         title: req.body.title,
         author: req.body.author,
-        description: req.body.description,
+        text: req.body.text,
         images: req.body.images
     });
 
@@ -65,9 +65,10 @@ articleRoutes.put('/:id', function (req, res){
         }
 
         article.title = req.body.title;
-        article.description = req.body.description;
+        article.text = req.body.text;
         article.author = req.body.author;
         article.images = req.body.images;
+        article.dateModified = Date.Now;
         return article.save(function (err) {
             if (!err) {
                 //log.info("article updated");

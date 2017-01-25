@@ -13,9 +13,10 @@ const Images = new Schema({
 const Article = new Schema({
     title: { type: String, required: true },
     author: { type: String, required: true },
-    description: { type: String, required: true },
+    text: { type: String, required: true },
     //images: [Images],
-    modified: { type: Date, default: Date.now }
+    dateCreated: { type: Date, default: Date.now },
+    dateModified: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('Article', Article);;

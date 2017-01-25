@@ -1,6 +1,6 @@
 import React from 'react'
 import Layout from './Layout'
-import ArticlesPage from './pages/Articles'
+import ArticlesPage from './articles/containers/Articles'
 import LoginPage from './pages/Login'
 import { Route, IndexRoute } from 'react-router'
 

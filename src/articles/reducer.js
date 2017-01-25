@@ -1,16 +1,21 @@
-import {
+'use strict';
+import * as articleActions from './actionTypes'
 
-} from './actionTypes'
-
-const initialState = {
-
-}
-
-function article(state = initialState, action) {
+export default (state = {}, action) => {
     switch (action.type) {
-        default:
-            return state
-    }
-}
+        case articleActions.GET_ARTICLES_REQUEST:
+            return {
+                ...state,
+                isFetching: true,
+            };
+            break;
+        case articleActions.GET_ARTICLES_SUCCESS:
+            return {
+                ...state,
+                articles: action.articles
+            };
 
-export default article
+    }
+
+    return state;
+};
