@@ -20,7 +20,7 @@ app.use(passport.initialize());
 //require('./oauth')
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.database);
+//mongoose.connect(config.database);
 
 var compiler = webpack(webPackConfig);
 app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webPackConfig.output.publicPath }));

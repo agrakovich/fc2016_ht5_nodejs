@@ -8,7 +8,7 @@ module.exports = {
     entry: [
         'webpack-hot-middleware/client',
         'babel-polyfill',
-        './src/index'
+        './src/app'
     ],
     output: {
         path: path.resolve(__dirname, './public/assets'),
@@ -17,7 +17,7 @@ module.exports = {
         filename: 'main.js'
     },
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['', '.js']
     },
     plugins: [
         new webpack.optimize.OccurrenceOrderPlugin(),
@@ -46,13 +46,14 @@ module.exports = {
     module: {
         loaders: [
             {
-                test: /\.jsx?$/,
+                test: /\.js$/,
                 include: [
                     path.resolve(__dirname, './src'),
                 ],
                 loader: 'babel-loader',
+                exclude: /(node_modules)/,
                 query: {
-                    presets: ['react', 'es2015', 'stage-0']
+                    presets: ['es2015', 'stage-0']
                 }
             },
             {

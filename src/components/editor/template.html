@@ -1,0 +1,21 @@
+<form name="articleForm">
+    <fieldset>
+        <fieldset>
+            <label>Title
+                <input name="title" ng-model="model.title" />
+            </label>
+        </fieldset>
+        <fieldset>
+            <label>Author
+                <input name="author" ng-model="model.author" />
+            </label>
+        </fieldset>
+        <fieldset>
+            <label>Text
+                <textarea name="text" ng-model="model.text"></textarea>
+            </label>
+        </fieldset>
+        <button type="button" ng-click="submit()" ng-disabled="articleForm.$invalid">Save</button>
+        <button type="button" ng-click="cancel()">Cancel</button>
+    </fieldset>
+</form>
