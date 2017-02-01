@@ -1,0 +1,38 @@
+<div ng-hide="!$ctrl.loading">
+    Loading articles...
+</div>
+
+<div ng-show="!$ctrl.loading && !$ctrl.articles.length">
+    No articles are here... yet.
+</div>
+
+<table ng-show="!$ctrl.loading && $ctrl.articles.length">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>DateTime</th>
+        <th>Author</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody ng-repeat="article in $ctrl.articles">
+        <tr>
+            <td>
+                <span ng-bind="article.title"></span>
+            </td>
+            <td>
+                <span ng-bind="article.dateTime | date:'medium'"></span>
+            </td>
+            <td>
+                <span ng-bind="article.author"></span>
+            </td>
+            <td>
+                <button ng-click="model.editItem(article)"></button>
+                <button ng-click="model.deleteItem(article)"></button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<list-pagination total-pages="$ctrl.listConfig.totalPages" current-page="$ctrl.listConfig.currentPage" ng-hide="$ctrl.listConfig.totalPages <= 1">
+</list-pagination>

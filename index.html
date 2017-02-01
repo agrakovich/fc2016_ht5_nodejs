@@ -1,17 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="articlesApp">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title></title>
     <link rel="stylesheet" href="/assets/main.css">
 </head>
-<body ng-controller="ArticleController as app">
-    <table>
-        <tr ng-repeat="article in articles">
-            <td>{{item.title}}</td>
-            <td>{{item.title}}</td>
-        </tr>
-    </table>
+<body>
+    <div ui-view></div>
     <script src="/assets/main.js"></script>
 </body>
 </html>
