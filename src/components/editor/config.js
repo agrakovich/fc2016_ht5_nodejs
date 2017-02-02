@@ -6,7 +6,7 @@ const EditorConfig = $stateProvider => {
         url: "/editor",
         controller: "EditorCtrl",
         controllerAs: "$ctrl",
-        templateUrl: "editor/template.html",
+        templateUrl: "./template.html",
         title: "Editor",
         resolve: {
             article: (ArticleService, $state, $stateParams) => {

@@ -3,7 +3,7 @@ import config from '../config'
 export default class ArticleServices {
 
     constructor($http, $q) {
-        "ngInject";
+        'ngInject';
 
         this._$http = $http;
         this._$q = $q;
@@ -14,11 +14,11 @@ export default class ArticleServices {
 
         if (article.slug) {
             request.url = `${config.apiUrl}/${config.articlesRoute}/${article.slug}`;
-            request.method = "PUT";
+            request.method = 'PUT';
             delete article.slug;
         } else {
             request.url = `${config.apiUrl}/${config.articlesRoute}`;
-            request.method = "POST";
+            request.method = 'POST';
         }
 
         request.data = { article };
@@ -29,14 +29,14 @@ export default class ArticleServices {
     get(slug) {
         const deferred = this._$q.defer();
 
-        if (!slug.replace(" ", "")) {
-            deferred.reject("Article slug is empty");
+        if (!slug.replace(' ', '')) {
+            deferred.reject('Article slug is empty');
             return deferred.promise;
         }
 
         this._$http({
             url: `${config.apiUrl}/${config.articlesRoute}/${slug}`,
-            method: "GET"
+            method: 'GET'
         })
         .then(res => deferred.resolve(res.data.article))
         .catch(err => deferred.reject(err));
@@ -47,14 +47,14 @@ export default class ArticleServices {
     delete(slug) {
         return this._$http({
             url: `${config.apiUrl}/${config.articlesRoute}/${slug}`,
-            method: "DELETE"
+            method: 'DELETE'
         });
     };
 
     query(params) {
         const request = {
-            url: `${config.apiUrl}/${config.articlesRoute}` + ((params.type === "feed") ? "/feed" : ""),
-            method: "GET",
+            url: `${config.apiUrl}/${config.articlesRoute}`,
+            method: 'GET',
             params: params.filters ? params.filters : null
         };
         return this._$http(request).then((res) => res.data);
