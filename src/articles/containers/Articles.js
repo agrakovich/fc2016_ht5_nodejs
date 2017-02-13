@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 class ArticlesPage extends React.Component {
 
     componentWillMount() {
-        articleActions.getArticles();
+        this.props.onLoad();
     }
 
     componentDidMount() {
@@ -25,8 +25,8 @@ const mapStateToProps = (state, ownProps) => ({
     articles: state.article.articles,
 });
 const mapDispatchToProps = dispatch => ({
-    onLoad: articleActions.getArticles,
-    deleteArticle: articleActions.getArticles,
+    onLoad: () => dispatch(articleActions.getArticles()),
+    deleteArticle: () => dispatch(articleActions.getArticles),
 });
 
 

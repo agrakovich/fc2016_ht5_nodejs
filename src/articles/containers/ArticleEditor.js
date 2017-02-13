@@ -1,21 +1,30 @@
 'use strict';
 
 import React from 'react';
-import agent from '../agent';
 import { connect } from 'react-redux';
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, ContentState } from 'draft-js';
+import * as articleActions from '../actions';
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 const mapStateToProps = state => ({
-    ...state.editor
+    articleId: state.article.articleId,
+    title: state.article.title,
+    text: state.article.text,
+    editorState: state.article && state.article.articleId ?
+        EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(state.article.text))):
+        EditorState.createEmpty()
 });
 
 const mapDispatchToProps = dispatch => ({
-    onLoad: payload =>
-        dispatch({ type: 'EDITOR_PAGE_LOADED', payload }),
-    onSubmit: payload =>
-        dispatch({ type: 'ARTICLE_SUBMITTED', payload }),
-    onUpdateField: (key, value) =>
-        dispatch({ type: 'UPDATE_FIELD_EDITOR', key, value })
+    onLoad: payload => dispatch(articleActions.initializeEditor(payload)),
+    onUnload: payload => dispatch(articleActions.unloadEditorPage()),
+    onSubmit: payload => dispatch(articleActions.submitEditorForm(payload)),
+    onUpdateField: (key, value) => dispatch({ type: 'UPDATE_FIELD_EDITOR', key, value })
 });
+
 
 class ArticleEditor extends React.Component {
     constructor() {
@@ -23,67 +32,56 @@ class ArticleEditor extends React.Component {
 
         const updateFieldEvent = key => ev => this.props.onUpdateField(key, ev.target.value);
         this.changeTitle = updateFieldEvent('title');
-        this.changeText = updateFieldEvent('text');
+        this.onEditorStateChange = (editorState) => this.setState({editorState});
 
         this.submitForm = ev => {
             ev.preventDefault();
+            console.log(this.props.editorState.getCurrentContent());
             const article = {
                 title: this.props.title,
-                text: this.props.text,
+                text: draftToHtml(this.props.editorState.getCurrentContent()),
             };
 
-            const id = { slug: this.props.articleId };
-            const articleAction = this.props.articleId ?
-                agent.Articles.update({...article, id}) :
-                agent.Articles.create(article);
-
-            this.props.onSubmit(articleAction);
+            this.props.onSubmit({...article, id: this.props.articleId});
         };
     }
 
     componentWillMount() {
-        if (this.props.articleId) {
-            return this.props.onLoad(this.props.articleId);
+        if (this.props.params.id) {
+            return this.props.onLoad(this.props.params.id);
         }
         this.props.onLoad(null);
+    }
+
+    componentWillUnmount() {
+        this.props.onUnload();
     }
 
     render() {
         return (
             <div>
-                <div>
-                    <div>
-                        <div>
-                            <form>
-                                <fieldset>
-                                    <fieldset>
-                                        <input
-                                            type="text"
-                                            placeholder="Article Title"
-                                            value={this.props.title}
-                                            onChange={this.changeTitle} />
-                                    </fieldset>
+                <form>
+                    <fieldset>
+                        <fieldset>
+                            <input
+                                type="text"
+                                placeholder="Article Title"
+                                value={this.props.title}
+                                onChange={this.changeTitle} />
+                        </fieldset>
 
-                                    <fieldset>
-                                        <textarea
-                                            rows="8"
-                                            placeholder="Write your article (in markdown)"
-                                            value={this.props.text}
-                                            onChange={this.changeText}>
-                                        </textarea>
-                                    </fieldset>
+                        <fieldset>
+                            <Editor editorState={this.props.editorState}
+                                    onEditorStateChange={this.onEditorStateChange} />
+                        </fieldset>
 
-                                    <button
-                                        disabled={this.props.inProgress}
-                                        onClick={this.submitForm}>
-                                        Publish Article
-                                    </button>
-                                </fieldset>
-                            </form>
-
-                        </div>
-                    </div>
-                </div>
+                        <button
+                            disabled={this.props.inProgress}
+                            onClick={this.submitForm}>
+                            Publish Article
+                        </button>
+                    </fieldset>
+                </form>
             </div>
         );
     }

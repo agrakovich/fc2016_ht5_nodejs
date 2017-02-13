@@ -5,6 +5,10 @@ export function getArticles() {
 
     const articlesRequest = {
         method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
     }
 
     return dispatch => {
@@ -13,14 +17,12 @@ export function getArticles() {
             .then(response => response.json().then(articles => ({ articles, response })))
             .then(({ articles, response }) => {
                 if (!response.ok) {
-                    //dispatch error
                     return Promise.reject(articles)
                 }
-
                 return dispatch(receiveArticles(articles))
             })
             .catch(err => {
-                console.log('Error: ', err)
+                return requestArticlesError(err)
             })
     }
 }
@@ -43,20 +45,68 @@ function requestArticlesError(message) {
     }
 }
 
-function requestAddArticles() {
-    return {
-        type: articleActions.POST_ARTICLE_REQUEST
+export function submitEditorForm(article) {
+
+    const isEditing = article.id ? true : false;
+
+    const editorRequest = {
+        method: isEditing ? 'PUT' : 'POST',
+        body: article
+    }
+
+    return dispatch => {
+        dispatch(requestSubmitEditorForm(isEditing))
+        return fetch(`${config.apiUrl}${config.articlesRoute}`, editorRequest)
+            .then(response => response.json().then(data => ({ data, response })))
+            .then(({ data, response }) => {
+                if (!response.ok) {
+                    return Promise.reject()
+                }
+                return dispatch(submitEditorFormSuccess())
+            })
+            .catch(err => {
+                return submitEditorFormError(isEditing, err)
+            })
     }
 }
-function AddArticleSuccess(articles) {
+
+function requestSubmitEditorForm(isEditing) {
     return {
-        type: articleActions.POST_ARTICLE_SUCCESS
+        type: isEditing ? articleActions.PUT_ARTICLE_REQUEST : articleActions.POST_ARTICLE_REQUEST
     }
 }
-function AddArticleError(message) {
+function submitEditorFormSuccess(isEditing) {
     return {
-        type: articleActions.POST_ARTICLE_FAILURE,
+        type: isEditing ? articleActions.PUT_ARTICLE_SUCCESS : articleActions.POST_ARTICLE_SUCCESS
+    }
+}
+function submitEditorFormError(isEditing, message) {
+    return {
+        type: isEditing ? articleActions.PUT_ARTICLE_FAILURE : articleActions.POST_ARTICLE_FAILURE,
         message,
+    }
+}
+
+export function deleteArticle(id) {
+
+    const deleteRequest = {
+        method: 'DELETE',
+        body: { id }
+    }
+
+    return dispatch => {
+        dispatch(requestDeleteArticle())
+        return fetch(`${config.apiUrl}${config.articlesRoute}`, deleteRequest)
+            .then(response => response.json().then(data => ({ data, response })))
+            .then(({ data, response }) => {
+                if (!response.ok) {
+                    return Promise.reject()
+                }
+                return dispatch(deleteArticleSuccess())
+            })
+            .catch(err => {
+                return deleteArticleError(err)
+            })
     }
 }
 
@@ -65,31 +115,77 @@ function requestDeleteArticle() {
         type: articleActions.DELETE_ARTICLE_REQUEST
     }
 }
-function DeleteArticleSuccess(articles) {
+function deleteArticleSuccess() {
     return {
         type: articleActions.DELETE_ARTICLE_SUCCESS,
     }
 }
-function DeleteArticleError(message) {
+function deleteArticleError(message) {
     return {
         type: articleActions.DELETE_ARTICLE_FAILURE,
         message,
     }
 }
 
-function requestEditArticle() {
-    return {
-        type: articleActions.PUT_ARTICLE_REQUEST
+
+export function initializeEditor(id) {
+
+    if(id){
+        const articleRequest = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        }
+
+        return dispatch => {
+            dispatch(requestArticle())
+            return fetch(`${config.apiUrl}${config.articlesRoute}/${id}`, articleRequest)
+                .then(response => response.json().then(data => ({ data, response })))
+                .then(({ data, response }) => {
+                    if (!response.ok) {
+                        return Promise.reject(data)
+                    }
+                    return dispatch(receiveArticle(data.article))
+                })
+                .catch(err => {
+                    return requestArticleError(err)
+                })
+        }
+    }else{
+        return dispatch => {
+            dispatch(createNewArticle())
+        }
     }
 }
-function EditArticleSuccess(articles) {
+
+function requestArticle() {
     return {
-        type: articleActions.PUT_ARTICLE_SUCCESS
+        type: articleActions.GET_ARTICLE_REQUEST
     }
 }
-function EditArticleError(message) {
+function receiveArticle(article) {
     return {
-        type: articleActions.PUT_ARTICLE_FAILURE,
+        type: articleActions.GET_ARTICLE_SUCCESS,
+        ...article
+    }
+}
+function requestArticleError(message) {
+    return {
+        type: articleActions.GET_ARTICLE_FAILURE,
         message,
     }
 }
+function createNewArticle(){
+    return {
+        type: articleActions.CREATE_NEW_ARTICLE
+    }
+}
+
+export function unloadEditorPage(){
+    return {
+        type: articleActions.EDITOR_PAGE_UNLOADED
+    }
+}
+

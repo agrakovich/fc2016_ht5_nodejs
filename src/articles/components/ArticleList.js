@@ -13,7 +13,7 @@ const ArticleList = props => {
         );
     }
 
-    if (props.length === 0) {
+    if (articles.length === 0) {
         return (
             <div>
                 No articles are here... yet.
@@ -22,12 +22,14 @@ const ArticleList = props => {
     }
 
     return (
-            articles.map(article => {
-                return (
-                    //temporary kludge for auth
-                    <Article article={article} deleteAction={deleteAction} canModify={article.author == "admin"} key={article.id} />
-                );
-            })
+        <div className="article-list">
+            {articles.map(article => {
+                    return (
+                        //temporary kludge for auth
+                        <Article article={article} deleteAction={deleteAction} canModify={article.author == "admin"} key={article._id} />
+                    );
+            })}
+        </div>
     );
 };
 

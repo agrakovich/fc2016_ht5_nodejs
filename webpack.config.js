@@ -55,11 +55,13 @@ module.exports = {
                     presets: ['react', 'es2015', 'stage-0']
                 }
             },
-            {
-                test: /\.(scss)$/i,
+            //{ test: /\.(scss|sass)$/, loader: 'style-loader!css-loader!sass-loader' },
+            { test: /\.css$/, loader: 'style-loader!css-loader' },
+            { test: /\.(scss|sass)$/,
                 // using "loader" instead of newer "use"
                 loader: ExtractTextPlugin.extract({
                     loader: [
+                        {loader: 'style-loader'},
                         {
                             loader: 'css-loader',
                             // current extract-text-plugin supports query not never options format
